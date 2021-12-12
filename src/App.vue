@@ -7,8 +7,8 @@
  * @FilePath: /vue3-admin/src/App.vue
 -->
 <template>
-  <div>123</div>
-  <router-view />
+    <div></div>
+    <router-view/>
 </template>
 
 <style lang="scss">

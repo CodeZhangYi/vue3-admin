@@ -6,15 +6,19 @@
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /vue3-admin/src/router/index.js
  */
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 
 const routes = [
- 
+    {
+        path: '/',
+        name: 'login',
+        component: () => import('../views/login/login')
+    }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes
+    history: createWebHashHistory(),
+    routes
 })
 
 export default router
