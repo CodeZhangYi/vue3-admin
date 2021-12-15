@@ -1,14 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-12-13 17:08:00
- * @LastEditTime: 2021-12-14 13:57:46
+ * @LastEditTime: 2021-12-15 18:12:44
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /vue3-admin/src/api/login/login.js
  */
 import service from "../../utils/request";
 /**
- * @description: 获取验证码
+ * @description: 获取登陆验证码
  * @param {*}
  * @return {*}
  * http://old.web-jshtml.cn/vue_admin_api/getSms/ 
@@ -18,5 +18,17 @@ export function GetCode(data) {
         url: 'getSms/',
         method: "POST",
         data       
+    })
+}
+/**
+ * @description: 获取注册验证码
+ * @param {*}
+ * @return {*}
+ */
+export function loginCode(data){
+    return service.request({
+        url:'login/',
+        method:'POST',
+        data
     })
 }

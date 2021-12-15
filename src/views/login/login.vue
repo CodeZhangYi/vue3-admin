@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-12 12:37:59
- * @LastEditTime: 2021-12-15 15:08:31
+ * @LastEditTime: 2021-12-15 18:17:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \vue3-admin\src\views\login\login.vue
@@ -31,7 +31,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <Code :username="form.username" :module="form.module" />
+        <Code :username="form.username" :code="form.code" />
       </el-form-item>
     </el-form>
     <el-row>
@@ -45,9 +45,10 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 // el
 import { ElMessage } from "element-plus";
+import { loginCode } from "../../api/login/login";
 // components
 import Code from "../../components/code/code.vue";
 components: {
@@ -55,10 +56,16 @@ components: {
 }
 const labelPosition = "right";
 const form = reactive({
-  username: "410293095@qq.com",
-  module: "login",
+  username: "2876043242@qq.com",
+  password: "123123q",
+  code: "",
 });
 const submit = () => {
+  form.code = "efihy4";
+  loginCode(form).then((res) => {
+    console.log(res);
+  });
+  return false;
   for (let item in form) {
     //登陆前判断用户是否把登陆框信息输入完整
     if (!form[item]) return ElMessage.info("请完善输入框信息～");

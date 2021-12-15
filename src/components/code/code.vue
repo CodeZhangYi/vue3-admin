@@ -36,6 +36,7 @@ const codeDisabled = ref(false);
 const props = defineProps({
   username: String,
   module: String,
+  code:String
 });
 //  获取验证码
 const getCode = () => {
