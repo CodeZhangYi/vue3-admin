@@ -1,15 +1,8 @@
-/*
- * @Author: your name
- * @Date: 2021-12-13 16:58:25
- * @LastEditTime: 2021-12-13 17:01:44
- * @LastEditors: Please set LastEditors
- * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /vue3-admin/src/utils/request.js
- */
 import axios from "axios";
 import { getToken, getUsername } from "./cookies";
+const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devApi'
 const service = axios.create({
-    baseURL: process.env.VUE_APP_API,
+    baseURL: BASEURL,
     timeout: 5000,
 });
 // 添加请求拦截器
@@ -27,7 +20,7 @@ service.interceptors.response.use(function (response) {
     // console.log(response);
     const data = response.data;
     if (data.resCode !== 0) {
-        this.message.error(data.message)
+        // message.error(data.message)
         return Promise.reject(response)
     } else {
         // 对响应数据做

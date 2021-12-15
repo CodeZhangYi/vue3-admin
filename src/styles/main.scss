@@ -68,3 +68,17 @@ body {
         font-size: 0.75rem;
     }
 }
+
+// input:-webkit-autofill, 去掉input默认填充样式
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+textarea:focus {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    border: solid 1.5px #2c97de;
+    box-shadow: 0 0 5px rgba(44, 151, 22, 0.2);
+}
