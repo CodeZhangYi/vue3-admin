@@ -7,15 +7,13 @@
  * @FilePath: /vue3-admin/src/components/code/code.vue
 -->
 <template>
-  <el-row>
-    <el-col :span="14">
+  <el-row :gutter="20">
+    <el-col :span="15">
       <el-input
         placeholder="请输入验证码"
         v-model="form.code"
       />
     </el-col>
-    <!-- 占位符 -->
-    <el-col :span="1"></el-col>
     <el-col :span="9">
       <el-button style="width:100%" type="success" @click="getCode" :disabled="codeDisabled"
         >{{ codeText }}
