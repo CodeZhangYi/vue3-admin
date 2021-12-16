@@ -7,13 +7,9 @@
  * @FilePath: /vue3-admin/src/components/component/login/loginBtn.vue
 -->
 <template>
-  <el-row>
-    <el-col :span="9">
-      <el-button type="primary" class="login-btn" @click="submit"
-        >登录
-      </el-button>
-    </el-col>
-  </el-row>
+  <el-button style="width:100%" type="primary" @click="submit"
+    >登录
+  </el-button>
 </template>
 
 <script setup>
@@ -42,11 +38,3 @@ const submit = () => {
   });
 };
 </script>
-
-<style scoped>
-.login-btn {
-  display: block;
-  margin-left: 90%;
-  width: 60%;
-}
-</style>

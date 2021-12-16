@@ -8,12 +8,11 @@
 -->
 <template>
     <div class="login">
-        <el-form :label-position="labelPosition" label-width="auto" class="form">
+        <el-form label-width="auto" class="form">
             <el-form-item prop="userName">
                 <el-input
                         v-model="form.username"
                         placeholder="请输入用户名"
-                        style="width: 70%"
                 />
                 <!-- 浏览器会为input默认填充数据 在input下加一个input隐藏即可 -->
                 <input
@@ -24,7 +23,6 @@
             </el-form-item>
             <el-form-item>
                 <el-input
-                        style="width: 70%"
                         type="password"
                         v-model="form.password"
                         placeholder="请输入密码"
@@ -34,9 +32,11 @@
                 <!--                获取验证码-->
                 <Code :username="form.username" :module="form.module" :code="form.code" @code="code"/>
             </el-form-item>
+            <el-form-item>
+                <!--        登录-->
+                <LoginBtn :form="form"/>
+            </el-form-item>
         </el-form>
-        <!--        登录-->
-        <LoginBtn :form="form"/>
     </div>
 </template>
 
@@ -50,7 +50,6 @@
         Code;
         LoginBtn
     }
-    const labelPosition = "right";
     const form = reactive({
         username: "2876043242@qq.com",
         password: "123123q",
@@ -63,21 +62,16 @@
     }
 </script>
 
-
-<style lang="scss">
-    .login {
+<style lang="scss" scoped>
+    .login{
+        width: 100vw;
         height: 100vh;
         background-color: #344a5f;
-    }
-
-    .form {
-        width: 60vh;
-        margin: 0 auto;
-        margin-top: 100px;
-    }
-
-
-    .el-form-item__label {
-        color: #fff;
+        display:flex;
+        justify-content:center;
+        align-items: center;
+        .form{
+            width:60vh
+        }
     }
 </style>

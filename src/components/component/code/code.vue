@@ -8,15 +8,16 @@
 -->
 <template>
   <el-row>
-    <el-col :span="11">
+    <el-col :span="14">
       <el-input
         placeholder="请输入验证码"
-        style="width: 98%"
         v-model="form.code"
       />
     </el-col>
-    <el-col :span="13">
-      <el-button type="success" @click="getCode" :disabled="codeDisabled"
+    <!-- 占位符 -->
+    <el-col :span="1"></el-col>
+    <el-col :span="9">
+      <el-button style="width:100%" type="success" @click="getCode" :disabled="codeDisabled"
         >{{ codeText }}
       </el-button>
     </el-col>
@@ -66,5 +67,3 @@ const countDown = () => {
   }, 1000);
 };
 </script>
-<style scoped lang="scss">
-</style>
