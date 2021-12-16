@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-12 12:37:59
- * @LastEditTime: 2021-12-15 18:17:37
+ * @LastEditTime: 2021-12-16 10:48:54
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \vue3-admin\src\views\login\login.vue
@@ -66,7 +66,7 @@
 
 <style lang="scss">
     .login {
-        height: 100%;
+        height: 100vh;
         background-color: #344a5f;
     }
 
