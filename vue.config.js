@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-12-20 17:18:02
+ * @LastEditTime: 2021-12-21 10:19:02
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: /vue3-admin/vue.config.js
+ */
 const path = require('path');
 module.exports = {
   // 基本路径
@@ -24,7 +32,7 @@ module.exports = {
     config.resolve = { // 配置解析别名
       extensions: ['.js', '.json', '.vue'],  // 自动添加文件名后缀
       alias: {
-        'vue': 'vue/dist/vue.js',
+        // 'vue': 'vue/dist/vue.js',
         '@': path.resolve(__dirname, './src'),
         '@c': path.resolve(__dirname, './src/components')
       }
@@ -65,7 +73,8 @@ module.exports = {
     // proxy: null,
     proxy: {
       '/devApi': {
-        target: "http://old.web-jshtml.cn/vue_admin_api", //API服务器的地址  http://www.web-jshtml.cn/api
+        // target: "http://old.web-jshtml.cn/vue_admin_api", //API服务器的地址  http://www.web-jshtml.cn/api
+        target: "http://180.76.102.1:9527", //API服务器的地址  http://www.web-jshtml.cn/api
         changeOrigin: true,
         pathRewrite: {
           '^/devApi': ''

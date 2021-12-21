@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-16 11:15:33
- * @LastEditTime: 2021-12-16 17:08:11
+ * @LastEditTime: 2021-12-21 17:51:36
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /vue3-admin/src/views/layout/components/Nav.vue
@@ -16,17 +16,18 @@
       active-text-color="#000"
       router
     >
-      <template v-for="(item, index) in routes" :key="item.id">
-        <el-sub-menu :index="index + ''" v-if="!item.hidden">
+      <template v-for="(item, index) in routes" :key="item.menuId">
+        <el-sub-menu :index="index + ''">
           <template #title>
             <el-icon><location /></el-icon>
-            <span>{{ item.meta.name }}</span>
+            <span>{{ item.name }}</span>
           </template>
+          <!-- {{item.list}} -->
           <el-menu-item
-            v-for="(subItem, index) in item.children"
+            v-for="(subItem, index) in item.list"
             :key="index"
-            :index="subItem.path"
-            >{{ subItem.meta.name }}</el-menu-item
+            :index="subItem.url"
+            >{{ subItem.name }}</el-menu-item
           >
         </el-sub-menu>
       </template>
@@ -41,16 +42,10 @@ import {
   Menu as IconMenu,
   Setting,
 } from "@element-plus/icons-vue";
-import { useRouter } from "vue-router";
-const useRouters = useRouter(); //获取路由数组
-let { routes } = useRouters.options;
-// console.log(routes);
-// const handleOpen = (key, keyPath) => {
-//   //   console.log(key, keyPath);
-// };
-// const handleClose = (key, keyPath) => {
-//   //   console.log(key, keyPath);
-// };
+// import { useRouter } from "vue-router";
+import { getRoutes } from "../../../utils/cookies";
+// routes 存储在本地 取出来渲染
+const routes = getRoutes();
 </script>
 <style lang="scss" scoped>
 @import "../../../styles/config.scss";
