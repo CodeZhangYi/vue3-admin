@@ -17,4 +17,28 @@ import { globalRegister } from './global/register-element'
 // createApp.component('svg-icon', {
 //     template: '<div>123123</div>'
 // })
+
+import { checkJurisdiction } from './utils/permissions.js'
+// 用户权限判断 - VUE自定义指令
+Vue.directive('permission',{
+  inserted(el, binding){
+    // inserted → 元素插入的时候
+    let permission = binding.value // 获取到 v-permission的值
+    if(permission){
+      let hasPermission = checkJurisdiction(permission)
+      if(!hasPermission){
+        // 没有权限 移除Dom元素
+        el.parentNode && el.parentNode.removeChild(el)
+      }
+    }else{
+      throw new Error('需要传key')
+    }
+  }
+})
+/**
+ * 权限实例
+ * <el-button v-permission="对应的权限ID"></el-button>
+ */
+
+
 createApp(App).use(store).use(router).use(globalRegister).mount('#app')
