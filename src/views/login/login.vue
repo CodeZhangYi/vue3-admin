@@ -62,7 +62,6 @@ const form = reactive({
 const code = (data) => {
   //code组件拿到验证码赋值form传给login组件
   form.captcha = data;
-  //   form.uuid = data
 };
 const uuid = (uuid) => {
   form.uuid = uuid;
@@ -78,7 +77,7 @@ const uuid = (uuid) => {
   justify-content: center;
   align-items: center;
   .form {
-    width: 60vh;
+    width: 300px;
   }
 }
 </style>

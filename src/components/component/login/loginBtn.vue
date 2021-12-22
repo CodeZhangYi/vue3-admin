@@ -32,7 +32,7 @@ const submit = () => {
   loginCode(form).then((res) => {
     if (res.data.code === 0) {
       ElMessage.success("登录成功");
-      router.push({ name: "console" });
+      router.push({ name: "sys" });
       setToken(res.data.token); //存储token
       getMenu();
     } else {

@@ -9,24 +9,24 @@
 <template>
   <div class="nav-wrap">
     <el-menu
-      default-active="2"
+      :default-active="$route.path"
       class="el-menu-vertical-demo"
-      background-color="transparent"
-      text-color="#fff"
-      active-text-color="#000"
+      background-color="#344a5f"
+      text-color="#909399"
+      active-text-color="#fff"
       router
     >
-      <template v-for="(item, index) in routes" :key="item.menuId">
-        <el-sub-menu :index="index + ''">
+      <template v-for="item in routes" :key="item.menuId">
+        <el-sub-menu :index="item.menuId+''">
           <template #title>
-            <el-icon><location /></el-icon>
+            <!-- <el-icon><location /></el-icon> -->
             <span>{{ item.name }}</span>
           </template>
-          <!-- {{item.list}} -->
           <el-menu-item
             v-for="(subItem, index) in item.list"
             :key="index"
             :index="subItem.url"
+            :disabled="subItem.menuId===5"
             >{{ subItem.name }}</el-menu-item
           >
         </el-sub-menu>
@@ -58,4 +58,6 @@ const routes = getRoutes();
   height: 100vh;
   background-color: #344a5f;
 }
+
+/deep/ .el-menu{border: 0;}
 </style>
