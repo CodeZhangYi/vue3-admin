@@ -15,6 +15,7 @@
     "js-sha1": "^0.6.0",
     "node-sass": "4.14",
     "normalize.css": "^8.0.1",
+    "qs": "^6.10.2",
     "react-cookies": "^0.1.1",
     "sass-loader": "^7.1.0",
     "vue": "^3.2.26",

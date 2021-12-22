@@ -1,7 +1,7 @@
 <template>
 	<el-dialog v-model="dialogFormVisible" title="新增">
-    <el-form :model="form">
-      <el-form-item label="角色名称" :label-width="formLabelWidth">
+    <el-form :model="form" :rules="rules">
+      <el-form-item label="角色名称" :label-width="formLabelWidth" prop='roleName'>
         <el-input v-model="form.roleName" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
@@ -9,6 +9,7 @@
       </el-form-item>
 			<el-form-item label="授权" :label-width="formLabelWidth">
         <el-tree
+					ref="tree"
 					:data="menuList"
 					show-checkbox
     			default-expand-all
@@ -27,8 +28,9 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from 'vue'
-import { GetMenuList } from '@/api/role'
+import { defineComponent, ref, reactive, toRefs } from 'vue'
+import { GetMenuList, SaveRole } from '@/api/role'
+import { ElMessage } from "element-plus";
 
 export default defineComponent({
 	setup(){
@@ -40,6 +42,15 @@ export default defineComponent({
         remark: '',
         menuIdList: [],
 			},
+			rules:{
+				roleName:[
+					{
+            required: true,
+            message: '请输入角色名称',
+            trigger: 'blur',
+          }
+				]
+			},
 			menuList:[],
       formLabelWidth: '120px',
 			defaultProps: {
@@ -47,6 +58,7 @@ export default defineComponent({
         label: 'name',
       },
 		})
+		const tree = ref(0)
 		const openDialog = async () => {
 			state.dialogFormVisible = true
 			await getMenuList()
@@ -83,11 +95,29 @@ export default defineComponent({
 			return result
 		}
 		// 提交表单
-		const onSubmit = () => {
-			console.log(state.form)
-
+		const onSubmit = async () => {
+			let temp = []
+			tree.value.getCheckedNodes().forEach(item=>temp.push(item.menuId))
+			state.form.menuIdList = temp
+			const { roleName,remark,menuIdList } = state.form
+			// return console.log(menuIdList)
+			const res = await SaveRole({
+				roleName,
+				remark,
+				menuIdList
+			})
+			res.data.code === 200 ? 
+			(
+				ElMessage.success(res.data.message),
+				state.dialogFormVisible = false
+			):
+			(
+				console.log(res.data),
+				ElMessage.error(res.data.message)
+			)
 		}
 		return {
+			tree,
       ...toRefs(state),
 			openDialog,
 			onSubmit
