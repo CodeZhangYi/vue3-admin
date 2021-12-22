@@ -1,8 +1,8 @@
 import service from "../../utils/request"
 // 获取登陆验证码
-export function GetRoleList(params) {
+export function GetMenuList(params) {
 	return service.request({
-			url: '/sys/role/select',
+			url: '/sys/menu/list',
 			method: 'get',
 			params
 	})

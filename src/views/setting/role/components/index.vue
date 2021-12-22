@@ -11,6 +11,7 @@
         <el-tree
 					:data="menuList"
 					show-checkbox
+    			default-expand-all
 					node-key="id"
 					:props="defaultProps"
 				/>
@@ -27,7 +28,7 @@
 
 <script>
 import { defineComponent, reactive, toRefs } from 'vue'
-import { GetRoleList } from '@/api/role'
+import { GetMenuList } from '@/api/role'
 
 export default defineComponent({
 	setup(){
@@ -41,24 +42,56 @@ export default defineComponent({
 			},
 			menuList:[],
       formLabelWidth: '120px',
+			defaultProps: {
+        children: 'children',
+        label: 'name',
+      },
 		})
+		const openDialog = async () => {
+			state.dialogFormVisible = true
+			await getMenuList()
+		}
+		// 初始化授权菜单
+		const getMenuList = async () => {
+			const res = await GetMenuList()
+			const { data } = res
+			data.length && (state.menuList = filterTreeData(data))
+			console.log(state.menuList)
+		}
+		// 扁平数据转树状
+		const filterTreeData = arr => {
+			const result = [] // 存放结果集
+			const itemMap = {} // 存放当前对象
+			for(let item of arr){
+				let id = item.menuId
+				let pid = item.parentId
+				if(!itemMap[id]){
+					itemMap[id] = {
+						children:[]
+					}
+				}
+				itemMap[id] = {
+					...item,
+					children:itemMap[id].children
+				}
+				if(pid === 0){
+					result.push(itemMap[id])
+				}else{
+					itemMap[pid].children.push(itemMap[id])
+				}
+			}
+			return result
+		}
+		// 提交表单
+		const onSubmit = () => {
+			console.log(state.form)
 
+		}
 		return {
       ...toRefs(state),
+			openDialog,
+			onSubmit
     }
 	},
-	methods:{
-		async getRoleList(){
-			const res = await GetRoleList()
-			console.log(res)
-		},
-		// 提交表单
-		onSubmit(){
-			console.log(this.form)
-		},
-	},
-	mounted(){
-		this.getRoleList()
-	}
 })
 </script>
