@@ -100,20 +100,19 @@ export default defineComponent({
 			tree.value.getCheckedNodes().forEach(item=>temp.push(item.menuId))
 			state.form.menuIdList = temp
 			const { roleName,remark,menuIdList } = state.form
-			// return console.log(menuIdList)
 			const res = await SaveRole({
 				roleName,
 				remark,
 				menuIdList
 			})
-			res.data.code === 200 ? 
+			const { code, msg } = res.data
+			code === 0 ? 
 			(
-				ElMessage.success(res.data.message),
+				ElMessage.success(msg),
 				state.dialogFormVisible = false
 			):
 			(
-				console.log(res.data),
-				ElMessage.error(res.data.message)
+				ElMessage.error(msg)
 			)
 		}
 		return {
