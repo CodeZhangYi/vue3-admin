@@ -20,7 +20,7 @@ import { globalRegister } from './global/register-element'
 
 import { checkJurisdiction } from './utils/permissions.js'
 // 用户权限判断 - VUE自定义指令
-Vue.directive('permission',{
+createApp(App).directive('permission',{
   inserted(el, binding){
     // inserted → 元素插入的时候
     let permission = binding.value // 获取到 v-permission的值
