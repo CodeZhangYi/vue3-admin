@@ -15,7 +15,7 @@
 			<el-button type="danger">批量删除</el-button>
 		</div>
 		<div class="table">
-			<el-table :data="info.tableData" border style="width: 100%">
+			<el-table  @selection-change="handleSelectionChange" :data="info.tableData" border style="width: 100%">
 				<el-table-column type="selection" width="55" align="center" />
 				<el-table-column prop="userId" label="ID" width="80" align="center" />
 				<el-table-column prop="username" label="用户名" align="center" />
@@ -23,42 +23,106 @@
 				<el-table-column prop="status" label="状态" align="center" />
 				<el-table-column prop="createTime" label="创建时间" width="180" align="center" />
 				<el-table-column label="Operations" width="120">
-          <template #default>
-            <el-button type="text" size="small" @click="handleClick"
-              >修改</el-button
-            >
-            <el-button type="text" size="small">删除</el-button>
+          <template #default="scope">
+            <el-button type="text" size="small" @click.prevent="modify(scope.$index, scope.row)" >修改</el-button>
+            <el-button type="text" size="small" @click.prevent="deleteRow(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
 			</el-table>
 		</div>
+    <selfDialog @cancel="cancel" @onSubmit='onSubmit' :dialogFormVisible='info.dialog'></selfDialog>
 	</div>
 </template>
 
 <script >
 import { reactive,defineComponent } from 'vue'
-import {userList} from '@/api/user/getInfo'
+import {userList,deleteUser,success,warning} from '@/api/user/getInfo'
 import { getToken } from "../../../utils/cookies";
+import selfDialog from './components/selfDialog.vue'
+import {ElMessage} from "element-plus";
 
-
-export default {
+export default defineComponent({
+  components:{
+      selfDialog
+  },
   setup() {
     // mounted
+    console.log(getToken())
     const info = reactive({
-      tableData:[]
+      tableData:[],
+      dialog:false
     })
-    const openAdd = (() =>{
+    //新增
+    const openAdd = (() =>{       
       console.log(info.tableData[0])
+      info.dialog = true
     })
-    userList().then((res) => {info.tableData = res.data.page.list})
+    //提交
+    const onSubmit = ((data) =>{
+      info.dialog = data.dialogFormVisible
+      info.tableData = data.tableData
+    })
+    //取消
+    const cancel = ((data) =>{
+      info.dialog = data
+      console.log(info.dialog)
+    })
+    //页面数据更新
+    const getList = (() =>{
+      userList().then((res) => {
+        console.log(res.data.page.list)
+        res.data.page.list.forEach(item => {
+          item.status === 0 ?item.status = '禁用':item.status = '正常'
+        })
+        info.tableData = res.data.page.list
+      })
+    })
+    getList()
+
+    
+    const deleteRow = ((index,tableData) =>{
+      console.log(index, tableData)
+      let params = []
+      params.push(tableData.userId)
+      deleteUser(params)
+      .then((res) =>{
+        console.log(res)
+        if(res.data.code == 0){
+          success('删除成功')
+          getList()
+        }
+      })
+      .catch((err) =>{
+        console.log(err)
+        ElMessage.error(`${err.msg}`)
+      })
+    })
+
+    const handleSelectionChange = ((data)=>{
+      console.log(data)
+    })
+
+    const modify = ((index,tableData) =>{
+      console.log(index, tableData)
+      
+    })
+      
+  
     return {
       info,
       openAdd,
+      cancel,
+      onSubmit,
+      deleteRow,
+      modify,
+      deleteUser,
+      getList,
+      handleSelectionChange,
       // userGet
     }
   },
   
-}
+})
 </script>
 
 
