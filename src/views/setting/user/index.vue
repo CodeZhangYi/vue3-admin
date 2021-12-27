@@ -8,11 +8,12 @@
 -->
 <template>
 	<div>
+
 		<div class="form">
-			<el-input style="width:200px;margin:0 20px 0 0" placeholder="用户名"></el-input>
-			<el-button>查询</el-button>
+			<el-input v-model="info.user" style="width:200px;margin:0 20px 0 0" placeholder="请输入用户名"></el-input>
+			<el-button @click='checkOut'>查询</el-button>
 			<el-button type="primary" @click="openAdd">新增</el-button>
-			<el-button type="danger">批量删除</el-button>
+			<el-button type="danger" @click='batchDelete'>批量删除</el-button>
 		</div>
 		<div class="table">
 			<el-table  @selection-change="handleSelectionChange" :data="info.tableData" border style="width: 100%">
@@ -30,13 +31,40 @@
         </el-table-column>
 			</el-table>
 		</div>
-    <selfDialog @cancel="cancel" @onSubmit='onSubmit' :dialogFormVisible='info.dialog'></selfDialog>
+    <selfDialog @cancel="cancel" @onSubmit='onSubmit' :dialogFormVisible='info.dialog' :userId='info.itemId' :amend='info.amend'></selfDialog>
+    <el-dialog
+      v-model="info.dialogVisibleSure"
+      title="删除"
+      width="30%"
+    >
+      <span>确定删除该条信息</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisibleSure = false">取消</el-button>
+          <el-button type="primary" @click="ConfirmDelete"
+            >确定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
+    
+    <div style='display:flex;margin-top:20px;margin-bottom:10px'>
+      <el-pagination
+        :page-size="10"
+        :pager-count="11"
+        layout="prev, pager, next"
+        :total="info.totalCount"
+        v-model:currentPage="info.currentPage"
+        >
+      </el-pagination>
+    </div>
+    
 	</div>
 </template>
 
 <script >
-import { reactive,defineComponent } from 'vue'
-import {userList,deleteUser,success,warning} from '@/api/user/getInfo'
+import { reactive,defineComponent,watch } from 'vue'
+import {userList,deleteUser,success,warning,userInfo} from '@/api/sys/user/getInfo'
 import { getToken } from "../../../utils/cookies";
 import selfDialog from './components/selfDialog.vue'
 import {ElMessage} from "element-plus";
@@ -49,12 +77,24 @@ export default defineComponent({
     // mounted
     console.log(getToken())
     const info = reactive({
+      batch:false,//批量删除
+      count:0,//第几页
+      currentPage:0,
+      totalCount:0,//总条目数
+      totalPage:0,//总也数
+      radio:1,
       tableData:[],
-      dialog:false
+      dialog:false,
+      deleteList:[],
+      user:'',//用户名
+      itemId:0,
+      row:null,
+      amend:null, //新增
+      dialogVisibleSure:false,//确定取消
     })
     //新增
     const openAdd = (() =>{       
-      console.log(info.tableData[0])
+      info.amend = false
       info.dialog = true
     })
     //提交
@@ -65,16 +105,26 @@ export default defineComponent({
     //取消
     const cancel = ((data) =>{
       info.dialog = data
-      console.log(info.dialog)
     })
     //页面数据更新
     const getList = (() =>{
-      userList().then((res) => {
-        console.log(res.data.page.list)
-        res.data.page.list.forEach(item => {
+      var date = {
+        page:1,
+        limit:10,
+        username:info.user,
+      }
+      userList(date).then((res) => {
+        if(res.data.code == 0){
+          res.data.page.list.forEach(item => {
           item.status === 0 ?item.status = '禁用':item.status = '正常'
-        })
-        info.tableData = res.data.page.list
+          })
+          info.tableData = res.data.page.list
+          info.totalCount = res.data.page.totalCount
+          info.totalPage = res.data.page.totalPage
+        }
+        else{
+          ElMessage.error(`${res.data.msg}`)
+        }
       })
     })
     getList()
@@ -82,42 +132,103 @@ export default defineComponent({
     
     const deleteRow = ((index,tableData) =>{
       console.log(index, tableData)
-      let params = []
-      params.push(tableData.userId)
-      deleteUser(params)
-      .then((res) =>{
-        console.log(res)
-        if(res.data.code == 0){
-          success('删除成功')
-          getList()
-        }
-      })
-      .catch((err) =>{
-        console.log(err)
-        ElMessage.error(`${err.msg}`)
-      })
+      info.itemId = tableData.userId
+      info.dialogVisibleSure = true
     })
 
     const handleSelectionChange = ((data)=>{
-      console.log(data)
+      info.deleteList = []
+      data.forEach(item=>{
+        info.deleteList.push(item.userId)
+      })
+      console.log(info.deleteList)
     })
 
-    const modify = ((index,tableData) =>{
-      console.log(index, tableData)
+    //批量删除
+    const batchDelete = () => {
+      if(info.deleteList.length == 0){
+        warning('请先选择要删除项')
+      }
+      else{
+        info.batch = true
+        info.dialogVisibleSure = true
+      }
+    }
+    const modify = async (index,tableData) =>{
+      info.amend = true
+      info.itemId = tableData.userId
+      info.dialog = true
+    }
+
+    const ConfirmDelete =(() =>{
+      if(info.batch){
+        deleteUser(info.deleteList)
+        .then((res) =>{
+          if(res.data.code == 0){
+            success('删除成功')
+            getList()
+          }
+        })
+        .catch((err) =>{
+          ElMessage.error(`${err.msg}`)
+        })
+      }
+      else{
+        let params = []
+        params.push(info.itemId)
+        deleteUser(params)
+        .then((res) =>{
+          console.log(res)
+          if(res.data.code == 0){
+            success('删除成功')
+            getList()
+          }
+        })
+        .catch((err) =>{
+          console.log(err)
+          ElMessage.error(`${err.msg}`)
+        })
+      }
+      info.dialogVisibleSure = false
+      info.batch = false
       
     })
-      
-  
+    //查询
+    const checkOut = () =>{
+      getList()
+    }
+
+watch(
+  ()=>info.currentPage,
+  (count, prevCount) => {
+    info.count = count
+    let date = {
+      limit:10,
+      page:count,
+      username:info.user,
+    }
+    userList(date).then((res) => {
+      res.data.page.list.forEach(item => {
+        item.status === 0 ?item.status = '禁用':item.status = '正常'
+      })
+      info.tableData = res.data.page.list
+    })
+  }
+)
     return {
       info,
       openAdd,
       cancel,
       onSubmit,
-      deleteRow,
       modify,
+      deleteRow,
       deleteUser,
       getList,
       handleSelectionChange,
+      batchDelete,
+      checkOut,
+      userInfo,
+      ConfirmDelete,
       // userGet
     }
   },
@@ -131,4 +242,8 @@ export default defineComponent({
 	margin:0 0 20px;
 }
 /deep/ .el-button+.el-button{margin-left: 20px;}
+/deep/ .cell{
+  display:flex;
+  justify-content: center;
+}
 </style>

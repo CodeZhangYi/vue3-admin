@@ -1,4 +1,4 @@
-import service from "../../utils/request"
+import service from "../../../utils/request"
 import { ElMessage } from "element-plus";
 //chengong
 export function success(params) {
@@ -34,6 +34,30 @@ export function saveUser(params) {
 			url: '/sys/user/save',
 			method: 'post',
 			data:JSON.stringify(params)
+	})
+}
+
+export function updateUser(params) {
+	return service.request({
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			url: '/sys/user/update',
+			method: 'post',
+			data:JSON.stringify(params)
+	})
+}
+
+
+//查询具体用户信息
+export function userInfo(userId) {
+	return service.request({
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			url: `/sys/user/info/${userId}`,
+			method: 'get',
+			// data:JSON.stringify(userId)
 	})
 }
 //删除
