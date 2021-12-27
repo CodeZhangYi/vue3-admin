@@ -20,6 +20,7 @@
     "sass-loader": "^7.1.0",
     "vue": "^3.2.26",
     "vue-router": "^4.0.0-0",
+    "vue3-eventbus": "^2.0.0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

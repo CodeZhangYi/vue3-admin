@@ -1,7 +1,7 @@
 <!--
  * @Author:张熠
  * @Date: 2021-12-23 09:50:49
- * @LastEditTime: 2021-12-23 10:49:41
+ * @LastEditTime: 2021-12-27 16:24:26
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /vue3-admin/src/views/setting/menu/components/table.vue
@@ -48,9 +48,11 @@
   </div>
 </template>
 <script setup>
-import { onMounted, reactive, ref, getCurrentInstance } from "vue";
+import { onMounted, reactive, ref, getCurrentInstance, watch } from "vue";
 import { menuList } from "../../../../api/sys/menu";
 import { treeDataTranslate } from "../../../../utils/index";
+import bus from "vue3-eventbus";
+import { ElMessage } from "element-plus";
 // 获取列表
 onMounted(() => {
   getList();
@@ -85,6 +87,18 @@ const changeOperation = (row, type) => {
   };
   app.emit("changeOperation", obj);
 };
+bus.on("res", (res) => {
+  let { code, msg } = res.data;
+  if (code === 0) {
+    getList();
+  }
+  return;
+});
+bus.on("code", (code) => {
+  if (code === 0) {
+    getList();
+  }
+});
 </script>
 <style scoped>
 </style>

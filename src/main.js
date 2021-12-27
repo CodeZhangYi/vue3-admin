@@ -1,7 +1,7 @@
 /*
  * @Author: 张熠
  * @Date: 2021-12-10 16:46:10
- * @LastEditTime: 2021-12-22 15:10:58
+ * @LastEditTime: 2021-12-27 10:08:11
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /vue3-admin/src/main.js
@@ -17,6 +17,8 @@ import { globalRegister } from './global/register-element'
 // createApp.component('svg-icon', {
 //     template: '<div>123123</div>'
 // })
+import eventBus from 'vue3-eventbus'
+// app.use(eventBus)
 
 import { checkJurisdiction } from './utils/permissions.js'
 // 用户权限判断 - VUE自定义指令
@@ -48,4 +50,4 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-createApp(App).use(store).use(router).use(globalRegister).mount('#app')
+createApp(App).use(store).use(router).use(globalRegister).use(eventBus).mount('#app')
