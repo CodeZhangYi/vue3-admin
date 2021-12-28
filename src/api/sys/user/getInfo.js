@@ -71,3 +71,11 @@ export function deleteUser(params) {
 			data:JSON.stringify(params)
 	})
 }
+//获取角色列表
+export function userRoleList(params) {
+	return service.request({
+			url: '/sys/role/list',
+			method: 'get',
+			params
+	})
+}

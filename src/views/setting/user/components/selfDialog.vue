@@ -35,9 +35,9 @@
           >
             <el-option
               v-for="item in state.role"
-              :key="item.name"
-              :label="item.age"
-              :value="item.age"
+              :key="item.roleId"
+              :label="item.roleName"
+              :value="item.roleId"
             >
             </el-option>
           </el-select>
@@ -57,7 +57,7 @@
 <script setup>
 import {  reactive,defineProps, watch, ref} from 'vue'
 import { ElMessage } from "element-plus";
-import {saveUser,userList,success,warning,userInfo,updateUser} from '@/api/sys/user/getInfo'
+import {saveUser,userList,success,warning,userInfo,updateUser,userRoleList} from '@/api/sys/user/getInfo'
 
 const state = reactive({
   role:[{name:'mhj',age:'30'},{name:'mj',age:'32'}],
@@ -138,6 +138,14 @@ state.dialogFormVisible = props.dialogFormVisible
 state.userId = props.userId
 console.log(state.userId)
 const emit = defineEmits(['cancel','onSubmit','handleClose'])
+
+const rolelist =  async() =>{
+  const roleList = await userRoleList()
+  const {code,msg,page} = roleList.data
+  console.log(page)
+  state.role = page.list
+}
+rolelist()
 
 var date = {
     page:1,
@@ -289,7 +297,9 @@ const handleClose = (() =>{
   state.dialogFormVisible = false
   emit('cancel',state.dialogFormVisible)
 })
-console.log(state)
+
+
+
 </script>
 <style lang='scss' scoped>
 /deep/ .el-select{
