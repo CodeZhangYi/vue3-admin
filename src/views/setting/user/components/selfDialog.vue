@@ -143,7 +143,10 @@ const rolelist =  async() =>{
   const roleList = await userRoleList()
   const {code,msg,page} = roleList.data
   console.log(page)
-  state.role = page.list
+  if(code == 0){
+    state.role = page.list
+  }
+  // 
 }
 rolelist()
 

@@ -12,7 +12,7 @@
 				<el-table-column prop="roleId" label="ID" width="80" align="center" />
 				<el-table-column prop="roleName" label="角色名称" align="center" />
 				<el-table-column prop="remark" label="备注" align="center" />
-				<el-table-column prop="createTime" label="创建时间" align="center" />
+				<el-table-colum  n prop="createTime" label="创建时间" align="center" />
 				<el-table-column label="操作" width="180" align="center">
 					<template #default="scope">
 						<el-button type="text" size="small">修改</el-button>
